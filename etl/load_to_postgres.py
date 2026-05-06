@@ -1,13 +1,15 @@
 import pandas as pd
 from sqlalchemy import create_engine, text
 import time
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
-
-
-# create the engine
-engine = create_engine("postgresql://josep:Medulla2026@localhost/glp1_analytics")
-
+engine = create_engine(
+    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+    f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+)
 # Drop tables in dependency order before reloading
 with engine.connect() as conn:
     conn.execute(text("DROP TABLE IF EXISTS transactions CASCADE"))
@@ -30,18 +32,18 @@ categories_data = [
     ("yogurt", "growing"),                 ("fresh_fruit_snacks", "growing"),
 ]
 cats_df = pd.DataFrame(categories_data, columns=["category_name", "category_type"])
+cats_df["category_id"] = range(1, len(cats_df) + 1)
 cats_df.to_sql("categories", engine, if_exists="replace", index=False)
 
 # Load transactions (chunked for performance practice)
 transactions = pd.read_csv("data/processed/transactions.csv")
-# Add category_id lookup
-cat_map = cats_df.reset_index().rename(columns={"index": "category_id"})
-cat_map["category_id"] += 1
-transactions = transactions.merge(cat_map[["category_name","category_id"]],
+
+# Add category_id lookup — cats_df already has category_id, use it directly
+transactions = transactions.merge(cats_df[["category_name", "category_id"]],
                                   left_on="category", right_on="category_name")
 
 start = time.time()
-transactions[["household_id","month","category_id","spend","months_on_drug"]]\
+transactions[["household_id", "month", "category_id", "spend", "months_on_drug"]]\
     .to_sql("transactions", engine, if_exists="replace",
             index=False, chunksize=5000, method="multi")
 print(f"Loaded {len(transactions):,} transactions in {time.time()-start:.1f}s")

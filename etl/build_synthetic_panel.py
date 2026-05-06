@@ -41,16 +41,16 @@ households.to_csv("data/processed/households.csv", index=False)
 print(f"Households: {len(households)} | GLP-1 users: {households['is_glp1_user'].sum()}")
 # --- Snack category definitions with baseline monthly spend ---
 categories = {
-    "chips_savory_snacks":  {"base_spend": 18.50, "glp1_effect": -0.101},
-    "sweet_bakery":         {"base_spend": 14.20, "glp1_effect": -0.088},
-    "cookies":              {"base_spend": 12.80, "glp1_effect": -0.065},
-    "candy_confectionery":  {"base_spend": 11.00, "glp1_effect": -0.055},
-    "crackers":             {"base_spend": 9.40,  "glp1_effect": -0.040},
-    "popcorn_pretzels":     {"base_spend":  7.80, "glp1_effect": -0.035},
-    "meat_snacks":          {"base_spend": 10.20, "glp1_effect": +0.042},  # KEY CATEGORY
-    "protein_bars":         {"base_spend":  8.60, "glp1_effect": +0.031},
-    "yogurt":               {"base_spend": 11.50, "glp1_effect": +0.058},  # largest gainer
-    "fresh_fruit_snacks":   {"base_spend":  9.80, "glp1_effect": +0.022},
+    "chips_savory_snacks":  {"base_spend": 18.50, "glp1_effect": -0.28},
+    "sweet_bakery":         {"base_spend": 14.20, "glp1_effect": -0.25},
+    "cookies":              {"base_spend": 12.80, "glp1_effect": -0.20},
+    "candy_confectionery":  {"base_spend": 11.00, "glp1_effect": -0.22},
+    "crackers":             {"base_spend": 9.40,  "glp1_effect": -0.15},
+    "popcorn_pretzels":     {"base_spend":  7.80, "glp1_effect": -0.18},
+    "meat_snacks":          {"base_spend": 10.20, "glp1_effect": +0.22},  # KEY CATEGORY
+    "protein_bars":         {"base_spend":  8.60, "glp1_effect": +0.15},
+    "yogurt":               {"base_spend": 11.50, "glp1_effect": +0.18},  # largest gainer
+    "fresh_fruit_snacks":   {"base_spend":  9.80, "glp1_effect": +0.12},
 }
 
 MONTHS = list(range(1, 13))  # 12-month period
